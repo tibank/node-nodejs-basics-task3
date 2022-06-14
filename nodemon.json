@@ -1,0 +1,11 @@
+{
+  "ignore": [".git", "node_modules/", "build/"],
+  "watch": ["./app.ts", "src/"],
+  "execMap": {
+    "ts": "npx ts-node-esm"
+  },
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js,json,ts"
+}
