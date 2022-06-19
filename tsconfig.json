@@ -2,14 +2,14 @@
   "compilerOptions": {
     "target": "es2016",
     "module": "ES6",
-    "outDir": "build",                          
+    "outDir": "dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,         
+    "strict": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
     "resolveJsonModule": true
   },
   "exclude": ["node_modules"],
-  "include": ["./src"]
+  "include": ["app.ts", "./src"]
 }
