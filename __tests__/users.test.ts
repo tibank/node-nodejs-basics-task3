@@ -2,10 +2,12 @@ import 'dotenv/config';
 import { Application } from '../src/server/server';
 import { userRouter } from '../src/routers/userRouter';
 import { setRequestHeaders } from '../src/helper/setRequestHeaders';
-import { User } from '../src/models/user.model';
 import request from 'supertest';
 
 const PORT = process.env.PORT || 3000;
+afterAll(() => {
+  app.server.close();
+});
 
 let id: string;
 
@@ -13,18 +15,6 @@ const testUserOne = {
   username: 'User 1',
   age: 30,
   hobbies: ['swimming', 'reading'],
-};
-
-const testUserTwo = {
-  name: 'User 2',
-  age: 35,
-  hobbies: ['walking'],
-};
-
-const testUserThree = {
-  name: 'User 3',
-  age: 40,
-  hobbies: ['swimming', 'walking'],
 };
 
 const app: Application = new Application();
@@ -46,11 +36,6 @@ it('should create a user', async (): Promise<void> => {
   id = res.body.id;
   expect(res.statusCode).toEqual(201);
   expect(res.body).toEqual({ id, ...testUserOne });
-});
-
-it('should create a user withoud required fields', async (): Promise<void> => {
-  const res = await request(app.server).post('/api/users').send(testUserTwo);
-  expect(res.statusCode).toEqual(400);
 });
 
 it('should get user by id (first created user)', async (): Promise<void> => {
