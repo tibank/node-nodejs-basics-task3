@@ -14,7 +14,6 @@ class UserService {
   async getById(req: any, res: any): Promise<void> {
     try {
       if (req.params.id && validate(req.params.id)) {
-        console.log('param id ' + req.params.id);
         const user: User | undefined = await userRepository.getById(req.params.id);
         if (user) {
           res.statusCode = 200;

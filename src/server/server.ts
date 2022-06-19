@@ -1,38 +1,61 @@
-import http from 'http'
-import EventEmitter  from 'events'
+import http from 'http';
+import EventEmitter from 'events';
+import { Router } from '../routers/router';
+import { parseRouter } from '../helper/parseRoute.js';
 
 export class Application {
-    server: http.Server
-    emitter: EventEmitter
-    middlewares: any []
+  server: http.Server;
+  emitter: EventEmitter;
+  middlewares: any[];
 
-    constructor() {
-        this.emitter = new EventEmitter()
-        this.server = this._createServer()
-        this.middlewares = []
-    }
+  constructor() {
+    this.emitter = new EventEmitter();
+    this.server = this.createHttpServer();
+    this.middlewares = [];
+  }
 
-    listen(port: string|number, callback: any ):void {
-        this.server.listen(port, callback)
-    }
+  public listen(port: string | number, callback: any): void {
+    this.server.listen(port, callback);
+  }
 
-    use(middleware: any):void {
-        this.middlewares.push(middleware)
-    }
+  public use(middleware: any): void {
+    this.middlewares.push(middleware);
+  }
 
-    _createServer(): http.Server {
-        return http.createServer((req: http.IncomingMessage, res: http.OutgoingMessage) => {
-            let body = ""
+  public route(router: Router): void {
+    Object.keys(router.endpoints).forEach((path) => {
+      const endpoint: any = router.endpoints[path];
+      Object.keys(endpoint).forEach((method) => {
+        this.emitter.on(`${path}:${method}`, (req, res) => {
+          const handler = endpoint[method];
+          handler(req, res);
+        });
+      });
+    });
+  }
 
-            req.on('data', (chunk: any) => {
-                body += chunk;
-             })
+  private createHttpServer(): http.Server {
+    return http.createServer((req: any, res: any) => {
+      let body = '';
+      req.on('data', (chunk: any) => {
+        body += chunk;
+      });
 
-             req.on('end', () => {
-                console.log(body)
-             })
+      req.on('end', () => {
+        //res.setHeader('Content-type', 'application/json');
 
-        })
-    } 
+        if (body) {
+          req.body = JSON.parse(body);
+        }
 
+        this.middlewares.forEach((middleware) => middleware(req, res));
+        parseRouter(req, this.emitter);
+
+        if (!req.eventNameEmitted || !this.emitter.emit(`${req.eventNameEmitted}`, req, res)) {
+          res.statusCode = 404;
+          res.end(JSON.stringify({ message: `The resource ${req.url} is not found!` }));
+        }
+      });
+    });
+  }
 }
