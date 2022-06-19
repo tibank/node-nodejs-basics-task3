@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import { Application } from './src/server/server.js';
-import { userRouter } from './src/routers/userRouter.js';
-import { setRequestHeaders } from './src/helper/setRequestHeaders.js';
+import { Application } from './src/server/server';
+import { userRouter } from './src/routers/userRouter';
+import { setRequestHeaders } from './src/helper/setRequestHeaders';
 
 const PORT: string | number = process.env.PORT || 3000;
 

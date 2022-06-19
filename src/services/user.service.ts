@@ -1,12 +1,11 @@
-import { User } from '../models/user.model.js';
-import { userRepository } from '../repositories/user.repository.js';
-import { userValidator } from '../helper/user.valadator.js';
+import { User } from '../models/user.model';
+import { userRepository } from '../repositories/user.repository';
+import { userValidator } from '../helper/user.valadator';
 import { validate } from 'uuid';
 
 class UserService {
   async getAll(req: any, res: any): Promise<void> {
     const allUsers = await userRepository.getAll();
-    allUsers.push(new User('Vova', 51, ['reading', 'swimming']));
     res.statusCode = 200;
     res.end(JSON.stringify(allUsers));
   }

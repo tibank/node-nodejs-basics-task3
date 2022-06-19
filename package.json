@@ -2,13 +2,12 @@
   "name": "nodejs-basics-task3",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "app.ts",
   "scripts": {
     "start:dev": "nodemon --config nodemon.json ./app.ts",
     "prestart:prod": "node -e \"const fs = require('fs'); fs.rmdirSync('./build', { recursive: true }); process.exit(0)\"",
     "start:prod": "tsc && node --unhandled-rejections=strict ./dist/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --runInBand --force-exit"
   },
   "repository": {
     "type": "git",
@@ -22,12 +21,17 @@
   },
   "homepage": "https://github.com/tibank/node-nodejs-basics-task3#readme",
   "dependencies": {
+    "@types/supertest": "^2.0.12",
     "@types/uuid": "^8.3.4",
     "dotenv": "^16.0.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/jest": "^28.1.2",
+    "jest": "^28.1.1",
     "nodemon": "^2.0.16",
+    "supertest": "^6.2.3",
+    "ts-jest": "^28.0.5",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.3"
   }

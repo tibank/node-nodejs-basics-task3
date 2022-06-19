@@ -1,7 +1,9 @@
 import http from 'http';
 import EventEmitter from 'events';
 import { Router } from '../routers/router';
-import { parseRouter } from '../helper/parseRoute.js';
+import { parseRouter } from '../helper/parseRoute';
+import { userRouter } from '../routers/userRouter';
+import { setRequestHeaders } from '../helper/setRequestHeaders';
 
 export class Application {
   server: http.Server;
@@ -37,13 +39,12 @@ export class Application {
   private createHttpServer(): http.Server {
     return http.createServer((req: any, res: any) => {
       let body = '';
+
       req.on('data', (chunk: any) => {
         body += chunk;
       });
 
       req.on('end', () => {
-        //res.setHeader('Content-type', 'application/json');
-
         if (body) {
           req.body = JSON.parse(body);
         }

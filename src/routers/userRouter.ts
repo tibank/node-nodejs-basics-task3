@@ -1,5 +1,5 @@
-import { Router } from './router.js';
-import { userService } from '../services/user.service.js';
+import { Router } from './router';
+import { userService } from '../services/user.service';
 
 const userRouter: Router = new Router();
 
